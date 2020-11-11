@@ -1,6 +1,6 @@
 module RedditSaver
   class Configuration
-    attr_accessor :saved, :upvoted, :subreddits, :users, :username, :password
+    attr_accessor :saved, :upvoted, :subreddits, :users, :username, :password, :download_dir
 
     def initialize
       @saved = false

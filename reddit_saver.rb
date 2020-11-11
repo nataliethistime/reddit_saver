@@ -9,6 +9,8 @@ puts "Running reddit_saver version #{RedditSaver::VERSION}"
 downloader = RedditSaver::Downloader.new
 
 downloader.setup do |config|
+  config.download_dir = File.join(__dir__, 'downloads')
+
   parser = OptionParser.new do |opts|
     opts.banner = 'Usage: reddit_saver.rb [options]'
 
