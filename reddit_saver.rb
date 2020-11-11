@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'bundler/setup'
+
 require_relative 'lib/reddit_saver'
 require 'optparse'
 

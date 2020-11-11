@@ -1,3 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'redd'
+gem 'redd', github: '1vasari/redd'

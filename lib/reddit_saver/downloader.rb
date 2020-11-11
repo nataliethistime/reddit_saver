@@ -22,8 +22,7 @@ module RedditSaver
         password: @config.password
       )
 
-      saved = @connection.me.saved(sort: :new, time: :all).to_a
-      # upvoted = @connection.me.liked
+      saved = @connection.me.saved(sort: :new, time: :all)
 
       saved.each do |post|
         puts post.url
