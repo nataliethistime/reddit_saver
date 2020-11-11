@@ -1,5 +1,6 @@
 module RedditSaver
   class Configuration
+    REQUIRED = [:username, :password, :download_dir]
     attr_accessor :saved, :upvoted, :subreddits, :users, :username, :password, :download_dir
 
     def initialize
@@ -11,11 +12,12 @@ module RedditSaver
 
     def setup
       yield self
-      puts self.inspect
     end
 
     def verify_config!
-      puts 'All Good!'
+      REQUIRED.each do |arg|
+        raise ArgumentError, "Did not provide #{arg}" if self.public_send(arg).nil?
+      end
     end
   end
 end
