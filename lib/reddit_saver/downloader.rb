@@ -16,6 +16,8 @@ module RedditSaver
     end
 
     def perform!
+      puts "Starting to download posts.\n"
+
       @connection = Redd.it(
         user_agent: "ruby:reddit_saver:v#{::RedditSaver::VERSION} (by /u/the_real_1vasari)",
         client_id: '6rT_5fUzi9V1Cg',
@@ -27,7 +29,7 @@ module RedditSaver
       download_collection(@connection.me.saved(sort: :new, time: :all)) if @config.saved
       download_collection(@connection.me.liked(sort: :new, time: :all)) if @config.upvoted
 
-      puts "Done. Looked at #{@looked_at} posts."
+      puts "\nDone. Looked at #{@looked_at} posts.\n"
     end
 
     def download_collection(collection)
@@ -43,8 +45,7 @@ module RedditSaver
       subreddit = post.subreddit.display_name
       path = File.join(@config.download_dir, "u-#{author}-r-#{subreddit}-#{post.id}#{extension}")
       return if File.exists?(path)
-      puts post.url
-      puts path
+      puts "#{post.url} => #{path}"
       Down.download(
         post.url,
         destination: path,
