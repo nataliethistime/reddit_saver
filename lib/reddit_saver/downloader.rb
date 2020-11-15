@@ -12,6 +12,7 @@ module RedditSaver
 
     def initialize
       @config = Configuration.new
+      @looked_at = 0
     end
 
     def perform!
@@ -25,6 +26,8 @@ module RedditSaver
 
       download_collection(@connection.me.saved(sort: :new, time: :all)) if @config.saved
       download_collection(@connection.me.liked(sort: :new, time: :all)) if @config.upvoted
+
+      puts "Done. Looked at #{@looked_at} posts."
     end
 
     def download_collection(collection)
@@ -32,6 +35,7 @@ module RedditSaver
     end
 
     def download_post(post)
+      @looked_at += 1
       extension = File.extname(URI.parse(post.url).path)
       return if extension.empty? || extension.nil? || extension == '.gifv'
       author = post.author.name
