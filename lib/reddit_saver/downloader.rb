@@ -1,5 +1,4 @@
 require_relative 'configuration'
-require_relative 'utilities'
 
 require 'net/http'
 require 'forwardable'
@@ -34,8 +33,12 @@ module RedditSaver
 
     def download_post(post)
       extension = File.extname(URI.parse(post.url).path)
-      filename = Utilities.sanitize_filename("u-#{post.author.name}-#{post.title}-#{post.id}")
-      path = File.join(@config.download_dir, "#{filename}#{extension}")
+      return if extension.empty? || extension.nil? || extension == '.gifv'
+      author = post.author.name
+      author = 'unknown' if author == '[deleted]'
+      subreddit = post.subreddit.display_name
+      path = File.join(@config.download_dir, "u-#{author}-r-#{subreddit}-#{post.id}#{extension}")
+      return if File.exists?(path)
       puts post.url
       puts path
       res = Net::HTTP.get(URI(post.url))
