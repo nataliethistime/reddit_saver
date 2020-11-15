@@ -1,8 +1,8 @@
 require_relative 'configuration'
 
-require 'net/http'
 require 'forwardable'
 require 'redd'
+require 'down'
 
 module RedditSaver
   class Downloader
@@ -45,8 +45,15 @@ module RedditSaver
       return if File.exists?(path)
       puts post.url
       puts path
-      res = Net::HTTP.get(URI(post.url))
-      File.write(path, res)
+      Down.download(
+        post.url,
+        destination: path,
+        headers: {
+          'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36'
+        }
+      )
+    rescue Down::NotFound
+      puts 'Not found.'
     end
   end
 end
