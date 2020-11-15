@@ -24,8 +24,12 @@ module RedditSaver
         password: @config.password
       )
 
-      saved = @connection.me.saved(sort: :new, time: :all)
-      saved.each { |p| download_post(p) }
+      download_collection(@connection.me.saved(sort: :new, time: :all)) if @config.saved
+      download_collection(@connection.me.liked(sort: :new, time: :all)) if @config.upvoted
+    end
+
+    def download_collection(collection)
+      collection.each { |post| download_post(post) }
     end
 
     def download_post(post)
