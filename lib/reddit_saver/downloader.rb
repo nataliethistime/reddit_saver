@@ -3,6 +3,7 @@ require_relative 'configuration'
 require 'forwardable'
 require 'redd'
 require 'down'
+require 'fileutils'
 
 module RedditSaver
   class Downloader
@@ -47,13 +48,8 @@ module RedditSaver
       path = File.join(@config.download_dir, "u-#{author}-r-#{subreddit}-#{post.id}#{extension}")
       return if File.exists?(path)
       puts "#{post.url} => #{path}"
-      Down.download(
-        post.url,
-        destination: path,
-        headers: {
-          'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36'
-        }
-      )
+      tmpfile = Down.download(post.url)
+      FileUtils.mv(tmpfile.path, path)
     rescue Down::NotFound
       puts 'Not found.'
     end
