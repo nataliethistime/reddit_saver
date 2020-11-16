@@ -38,6 +38,7 @@ module RedditSaver
 
     def download_post(post)
       @looked_at += 1
+      return if post.url.include?('imgur.com') # Skip imgur as we need to use their API and I can't be bothered right now
       extension = File.extname(URI.parse(post.url).path)
       return if extension.empty? || extension.nil? || extension == '.gifv'
       author = post.author.name
